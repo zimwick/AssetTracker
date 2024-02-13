@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using AssetTracker_BackEnd.Data;
+using AssetTracker_BackEnd.Models.Asset;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AssetTracker_BackEnd.Data;
 
 namespace AssetTracker_BackEnd.Controllers
 {
@@ -14,22 +11,26 @@ namespace AssetTracker_BackEnd.Controllers
     public class AssetsController : ControllerBase
     {
         private readonly AssetTrackerDbContext _context;
+        private readonly IMapper _mapper;
 
-        public AssetsController(AssetTrackerDbContext context)
+        public AssetsController(AssetTrackerDbContext context, IMapper mapper)
         {
             _context = context;
+            this._mapper = mapper;
         }
 
         // GET: api/Assets
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Asset>>> GetAssets()
+        public async Task<ActionResult<IEnumerable<AssetDto>>> GetAssets()
         {
-            return await _context.Assets.ToListAsync();
+            var assets = await _context.Assets.ToListAsync();
+            var records = _mapper.Map<List<AssetDto>>(assets);
+            return Ok(records);
         }
 
         // GET: api/Assets/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Asset>> GetAsset(int id)
+        public async Task<ActionResult<AssetDto>> GetAsset(int id)
         {
             var asset = await _context.Assets.FindAsync(id);
 
@@ -38,7 +39,9 @@ namespace AssetTracker_BackEnd.Controllers
                 return NotFound();
             }
 
-            return asset;
+            var assetDto = _mapper.Map<AssetDto>(asset);
+
+            return Ok(assetDto);
         }
 
         // PUT: api/Assets/5
@@ -75,8 +78,11 @@ namespace AssetTracker_BackEnd.Controllers
         // POST: api/Assets
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Asset>> PostAsset(Asset asset)
+        public async Task<ActionResult<Asset>> PostAsset(CreateAssetDto createAssetDto)
         {
+
+            var asset = _mapper.Map<Asset>(createAssetDto);
+
             _context.Assets.Add(asset);
             await _context.SaveChangesAsync();
 

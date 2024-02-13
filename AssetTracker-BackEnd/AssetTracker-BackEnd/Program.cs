@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+//sql server settings
 var connectionString = builder.Configuration.GetConnectionString("AssetTrackerDbConnectionString");
 builder.Services.AddDbContext<AssetTrackerDbContext>(options =>
 {

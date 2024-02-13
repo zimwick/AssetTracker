@@ -8,5 +8,7 @@ namespace AssetTracker_BackEnd.Data
         {
 
         }
+
+        public DbSet<Asset> Assets { get; set; }
     }
 }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AssetTracker-BackEnd")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f50af396dbbe4bf9c017561826d32c5270a39e32")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+58cf8054234f5e5da9a2ad62ca13d6333d83e4ad")]
 [assembly: System.Reflection.AssemblyProductAttribute("AssetTracker-BackEnd")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AssetTracker-BackEnd")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\LIGHTJ60\\Documents\\d424-software-engineering-capstone\\AssetTracker-BackEnd\\AssetTracker-BackEnd\\AssetTracker-BackEnd.csproj": {}
+    "C:\\Users\\LIGHTJ60\\Source\\Repos\\d424-software-engineering-capstone\\AssetTracker-BackEnd\\AssetTracker-BackEnd\\AssetTracker-BackEnd.csproj": {}
   },
   "projects": {
-    "C:\\Users\\LIGHTJ60\\Documents\\d424-software-engineering-capstone\\AssetTracker-BackEnd\\AssetTracker-BackEnd\\AssetTracker-BackEnd.csproj": {
+    "C:\\Users\\LIGHTJ60\\Source\\Repos\\d424-software-engineering-capstone\\AssetTracker-BackEnd\\AssetTracker-BackEnd\\AssetTracker-BackEnd.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LIGHTJ60\\Documents\\d424-software-engineering-capstone\\AssetTracker-BackEnd\\AssetTracker-BackEnd\\AssetTracker-BackEnd.csproj",
+        "projectUniqueName": "C:\\Users\\LIGHTJ60\\Source\\Repos\\d424-software-engineering-capstone\\AssetTracker-BackEnd\\AssetTracker-BackEnd\\AssetTracker-BackEnd.csproj",
         "projectName": "AssetTracker-BackEnd",
-        "projectPath": "C:\\Users\\LIGHTJ60\\Documents\\d424-software-engineering-capstone\\AssetTracker-BackEnd\\AssetTracker-BackEnd\\AssetTracker-BackEnd.csproj",
+        "projectPath": "C:\\Users\\LIGHTJ60\\Source\\Repos\\d424-software-engineering-capstone\\AssetTracker-BackEnd\\AssetTracker-BackEnd\\AssetTracker-BackEnd.csproj",
         "packagesPath": "C:\\Users\\LIGHTJ60\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LIGHTJ60\\Documents\\d424-software-engineering-capstone\\AssetTracker-BackEnd\\AssetTracker-BackEnd\\obj\\",
+        "outputPath": "C:\\Users\\LIGHTJ60\\Source\\Repos\\d424-software-engineering-capstone\\AssetTracker-BackEnd\\AssetTracker-BackEnd\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\LIGHTJ60\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,6 +40,16 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"

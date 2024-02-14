@@ -1,4 +1,5 @@
-﻿using AssetTracker_BackEnd.Data;
+﻿using AssetTracker_BackEnd.Contracts;
+using AssetTracker_BackEnd.Data;
 using AssetTracker_BackEnd.Models.Asset;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -10,20 +11,20 @@ namespace AssetTracker_BackEnd.Controllers
     [ApiController]
     public class AssetsController : ControllerBase
     {
-        private readonly AssetTrackerDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IAssetsRepository _assetsRepository;
 
-        public AssetsController(AssetTrackerDbContext context, IMapper mapper)
+        public AssetsController(IMapper mapper, IAssetsRepository assetsRepository)
         {
-            _context = context;
             this._mapper = mapper;
+            this._assetsRepository = assetsRepository;
         }
 
         // GET: api/Assets
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AssetDto>>> GetAssets()
         {
-            var assets = await _context.Assets.ToListAsync();
+            var assets = await _assetsRepository.GetAllAsync();
             var records = _mapper.Map<List<AssetDto>>(assets);
             return Ok(records);
         }
@@ -32,7 +33,7 @@ namespace AssetTracker_BackEnd.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<AssetDto>> GetAsset(int id)
         {
-            var asset = await _context.Assets.FindAsync(id);
+            var asset = await _assetsRepository.GetAsync(id);
 
             if (asset == null)
             {
@@ -47,22 +48,29 @@ namespace AssetTracker_BackEnd.Controllers
         // PUT: api/Assets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsset(int id, Asset asset)
+        public async Task<IActionResult> PutAsset(int id, UpdateAssetDto updateAssetDto)
         {
-            if (id != asset.Id)
+            if (id != updateAssetDto.Id)
             {
-                return BadRequest();
+                return BadRequest("Inbalid Record Id");
             }
 
-            _context.Entry(asset).State = EntityState.Modified;
+            var asset = await _assetsRepository.GetAsync(id);
+
+            if (asset == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(updateAssetDto, asset);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _assetsRepository.UpdateAsync(asset);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AssetExists(id))
+                if (!await AssetExists(id))
                 {
                     return NotFound();
                 }
@@ -83,8 +91,7 @@ namespace AssetTracker_BackEnd.Controllers
 
             var asset = _mapper.Map<Asset>(createAssetDto);
 
-            _context.Assets.Add(asset);
-            await _context.SaveChangesAsync();
+            await _assetsRepository.AddAsync(asset);
 
             return CreatedAtAction("GetAsset", new { id = asset.Id }, asset);
         }
@@ -93,21 +100,20 @@ namespace AssetTracker_BackEnd.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsset(int id)
         {
-            var asset = await _context.Assets.FindAsync(id);
+            var asset = await _assetsRepository.GetAsync(id);
             if (asset == null)
             {
                 return NotFound();
             }
 
-            _context.Assets.Remove(asset);
-            await _context.SaveChangesAsync();
+            await _assetsRepository.DeleteAsync(id);
 
             return NoContent();
         }
 
-        private bool AssetExists(int id)
+        private async Task<bool> AssetExists(int id)
         {
-            return _context.Assets.Any(e => e.Id == id);
+            return await _assetsRepository.Exists(id);
         }
     }
 }

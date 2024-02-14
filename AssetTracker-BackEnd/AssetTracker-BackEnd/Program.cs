@@ -1,5 +1,7 @@
 using AssetTracker_BackEnd.Configurations;
+using AssetTracker_BackEnd.Contracts;
 using AssetTracker_BackEnd.Data;
+using AssetTracker_BackEnd.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +22,9 @@ builder.Services.AddSwaggerGen();
 
 //setting up automapper to auto map Assetcontroller to CreateAssetDto
 builder.Services.AddAutoMapper(typeof(MapperConfig));
+
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IAssetsRepository, AssetsRepository>();
 
 var app = builder.Build();
 

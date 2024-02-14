@@ -10,6 +10,7 @@ namespace AssetTracker_BackEnd.Configurations
         {
             CreateMap<Asset, CreateAssetDto>().ReverseMap();
             CreateMap<Asset, AssetDto>().ReverseMap();
+            CreateMap<Asset, UpdateAssetDto>().ReverseMap();
 
         }
     }

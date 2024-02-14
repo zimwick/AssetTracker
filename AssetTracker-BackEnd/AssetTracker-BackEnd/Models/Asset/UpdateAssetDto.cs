@@ -1,8 +1,7 @@
 ﻿namespace AssetTracker_BackEnd.Models.Asset
 {
-    public class AssetDto : BaseAssetDto
+    public class UpdateAssetDto : BaseAssetDto
     {
         public int Id { get; set; }
     }
-
 }

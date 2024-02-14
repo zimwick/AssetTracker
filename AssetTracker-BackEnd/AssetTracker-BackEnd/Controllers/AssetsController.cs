@@ -2,6 +2,7 @@
 using AssetTracker_BackEnd.Data;
 using AssetTracker_BackEnd.Models.Asset;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ namespace AssetTracker_BackEnd.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AssetsController : ControllerBase
     {
         private readonly IMapper _mapper;

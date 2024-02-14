@@ -1,5 +1,6 @@
 ﻿using AssetTracker_BackEnd.Contracts;
 using AssetTracker_BackEnd.Models.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetTracker_BackEnd.Controllers
@@ -18,6 +19,7 @@ namespace AssetTracker_BackEnd.Controllers
         // POST: api/Account/register
         [HttpPost]
         [Route("register")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -46,6 +48,24 @@ namespace AssetTracker_BackEnd.Controllers
         public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
         {
             var authResponse = await _authManager.Login(loginDto);
+
+            if (authResponse == null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(authResponse);
+        }
+
+        // POST: api/Account/refreshtoken
+        [HttpPost]
+        [Route("refreshtoken")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> RefreshToken([FromBody] AuthResponseDto request)
+        {
+            var authResponse = await _authManager.VerifyRefreshToken(request);
 
             if (authResponse == null)
             {

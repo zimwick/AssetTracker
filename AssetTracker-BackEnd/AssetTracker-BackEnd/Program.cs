@@ -22,7 +22,9 @@ builder.Services.AddDbContext<AssetTrackerDbContext>(options =>
 //setting up users to authenticate with api using identitycore
 builder.Services.AddIdentityCore<ApiUser>()
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<AssetTrackerDbContext>();
+    .AddTokenProvider<DataProtectorTokenProvider<ApiUser>>("AssetTracker")
+    .AddEntityFrameworkStores<AssetTrackerDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

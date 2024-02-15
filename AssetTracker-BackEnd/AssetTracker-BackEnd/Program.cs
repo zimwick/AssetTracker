@@ -19,6 +19,15 @@ builder.Services.AddDbContext<AssetTrackerDbContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
+//cors settings
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        b => b.AllowAnyHeader()
+        .AllowAnyOrigin()
+        .AllowAnyMethod());
+});
+
 //setting up users to authenticate with api using identitycore
 builder.Services.AddIdentityCore<ApiUser>()
     .AddRoles<IdentityRole>()
@@ -68,6 +77,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 

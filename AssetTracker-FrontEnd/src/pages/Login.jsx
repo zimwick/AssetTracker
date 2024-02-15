@@ -6,8 +6,6 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const [email, setEmail] = useState("user@example.com");
   const [password, setPassword] = useState("qwerty");
-  const [token, setToken] = useState(null);
-  const [refreshToken, setRefreshToken] = useState(null);
   const navigate = useNavigate();
 
   const URL_PATH = "Account/login";
@@ -15,13 +13,12 @@ export default function Login() {
 
   useEffect(() => {
     if (response.token && response.refreshToken) {
-      setToken(response.token);
-      setRefreshToken(response.refreshToken);
-      navigate("/dashboard", {
-        state: { token: token, refreshToken: refreshToken },
-      });
+      sessionStorage.setItem("userId", response.userId);
+      sessionStorage.setItem("token", response.token);
+      sessionStorage.setItem("refreshToken", response.refreshToken);
+      navigate("/dashboard", { replace: true });
     }
-  }, [response, navigate, refreshToken, token]);
+  }, [response, navigate]);
 
   async function handleSubmit(e) {
     e.preventDefault();

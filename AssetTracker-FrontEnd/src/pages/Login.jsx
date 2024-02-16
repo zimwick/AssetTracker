@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("user@example.com");
-  const [password, setPassword] = useState("qwerty");
+  const [password, setPassword] = useState("Password@1");
   const navigate = useNavigate();
 
   const URL_PATH = "Account/login";

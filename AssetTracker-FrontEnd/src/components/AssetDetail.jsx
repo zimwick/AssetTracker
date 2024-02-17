@@ -1,24 +1,25 @@
 import { useState } from "react";
+import { BASE_URL } from "../utils/BaseUrl";
 
-export default function DashboardForm({
-  postData,
-  getData,
-  toggleFormVisibility,
-}) {
-  const [name, setName] = useState("");
-  const [make, setMake] = useState("");
-  const [model, setModel] = useState("");
-  const [location, setLocation] = useState("");
-  const [serialNumber, setSerialNumber] = useState("");
-  const [pricePaid, setPricePaid] = useState("");
-  const [DatePurchased, setDatePurchased] = useState("");
-  const [warrantyExpiration, setWarrantyExpiration] = useState("");
-  const [ownerFirstName, setOwnerFirstName] = useState("");
-  const [ownerLastName, setOwnerLastName] = useState("");
+export default function AssetDetail({ showDetails, setShowDetails, getData }) {
+  const [name, setName] = useState(showDetails.name);
+  const [make, setMake] = useState(showDetails.make);
+  const [model, setModel] = useState(showDetails.model);
+  const [location, setLocation] = useState(showDetails.location);
+  const [serialNumber, setSerialNumber] = useState(showDetails.serialNumber);
+  const [pricePaid, setPricePaid] = useState(showDetails.pricePaid);
+  const [DatePurchased, setDatePurchased] = useState(showDetails.datePurchased);
+  const [warrantyExpiration, setWarrantyExpiration] = useState(
+    showDetails.warrantyExpiration
+  );
+  const [ownerFirstName, setOwnerFirstName] = useState(
+    showDetails.ownerFirstName
+  );
+  const [ownerLastName, setOwnerLastName] = useState(showDetails.ownerLastName);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const newAsset = {
+    const updatedAsset = {
       name,
       make,
       model,
@@ -29,10 +30,39 @@ export default function DashboardForm({
       warrantyExpiration,
       ownerFirstName,
       ownerLastName,
+      id: showDetails.id,
     };
-    await postData(newAsset);
-    toggleFormVisibility();
+    try {
+      const response = await fetch(`${BASE_URL}/ASSETS/${showDetails.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(updatedAsset),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Check if the response has content before parsing it as JSON
+      const contentType = response.headers.get("Content-Type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        console.log("Success:", data);
+        // Handle success, e.g., show a message to the user or update the UI
+      } else {
+        // Handle no content
+        console.log("Request was successful, but no content returned.");
+        // You might want to update UI or state to reflect the successful update
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      // Handle errors, e.g., show an error message to the user
+    }
     await getData(sessionStorage.getItem("token"));
+    setShowDetails(false);
   }
 
   return (
@@ -107,7 +137,7 @@ export default function DashboardForm({
       />
 
       <button type="submit">Submit</button>
-      <button type="submit" onClick={toggleFormVisibility}>
+      <button type="submit" onClick={() => setShowDetails(false)}>
         Cancel
       </button>
     </form>

@@ -5,6 +5,7 @@ import { BASE_URL } from "../utils/BaseUrl";
 import AssetTable from "../components/AssetTable";
 import usePost from "../hooks/usePost";
 import AddAsset from "../components/AddAsset";
+import AssetDetail from "../components/AssetDetail";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -29,8 +30,6 @@ export default function Dashboard() {
     setShowForm(!showForm);
   };
 
-  console.log(showDetails);
-
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
     if (!userId) {
@@ -46,11 +45,12 @@ export default function Dashboard() {
     <div>
       <div>Dashboard!</div>
       <div>
-        {!showForm && (
-          <button type="submit" onClick={toggleFormVisibility}>
-            Add Asset
-          </button>
-        )}
+        {showForm ||
+          (!showDetails && (
+            <button type="submit" onClick={toggleFormVisibility}>
+              Add Asset
+            </button>
+          ))}
 
         {showForm && (
           <AddAsset
@@ -59,10 +59,19 @@ export default function Dashboard() {
             toggleFormVisibility={toggleFormVisibility}
           />
         )}
-        <AssetTable
-          response={getDataResponse}
-          setShowDetails={setShowDetails}
-        />
+        {showDetails && (
+          <AssetDetail
+            showDetails={showDetails}
+            setShowDetails={setShowDetails}
+            getData={getData}
+          />
+        )}
+        {!showDetails && (
+          <AssetTable
+            response={getDataResponse}
+            setShowDetails={setShowDetails}
+          />
+        )}
       </div>
     </div>
   );

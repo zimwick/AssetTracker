@@ -65,6 +65,37 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
     setShowDetails(false);
   }
 
+  async function handleDelete() {
+    try {
+      const response = await fetch(`${BASE_URL}/ASSETS/${showDetails.id}`, {
+        method: "DELETE", // Specify the method to use
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+        // No need to send a body with a DELETE request typically
+      });
+
+      if (!response.ok) {
+        // If the response is not ok, throw an error
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Optionally, handle the response data
+      // const data = await response.json();
+      // console.log('Delete successful', data);
+
+      // Perform any follow-up actions after deletion
+      // For example, updating the UI or fetching the current list of items
+      console.log("Delete successful");
+    } catch (error) {
+      console.error("Error:", error);
+      // Handle any errors, such as showing an error message to the user
+    }
+    await getData(sessionStorage.getItem("token"));
+    setShowDetails(false);
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <input
@@ -137,7 +168,10 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
       />
 
       <button type="submit">Submit</button>
-      <button type="submit" onClick={() => setShowDetails(false)}>
+      <button type="button" onClick={() => handleDelete()}>
+        Delete
+      </button>
+      <button type="button" onClick={() => setShowDetails(false)}>
         Cancel
       </button>
     </form>

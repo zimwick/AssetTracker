@@ -107,7 +107,7 @@ export default function DashboardForm({
       />
 
       <button type="submit">Submit</button>
-      <button type="submit" onClick={toggleFormVisibility}>
+      <button type="button" onClick={toggleFormVisibility}>
         Cancel
       </button>
     </form>

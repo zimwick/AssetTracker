@@ -6,12 +6,14 @@ import AssetTable from "../components/AssetTable";
 import usePost from "../hooks/usePost";
 import AddAsset from "../components/AddAsset";
 import AssetDetail from "../components/AssetDetail";
+import Reporting from "../components/Reporting";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const URL_PATH = "Assets";
   const [showForm, setShowForm] = useState(false);
   const [showDetails, setShowDetails] = useState(null);
+  const [showReporting, setShowReporting] = useState(null);
 
   function logout() {
     navigate("/", { replace: true });
@@ -34,6 +36,9 @@ export default function Dashboard() {
   const toggleFormVisibility = () => {
     setShowForm(!showForm);
   };
+  const toggleReportingVisibility = () => {
+    setShowReporting(!showReporting);
+  };
 
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
@@ -52,18 +57,27 @@ export default function Dashboard() {
       <div>
         {showForm ||
           (!showDetails && (
-            <button type="submit" onClick={toggleFormVisibility}>
+            <button type="button" onClick={toggleFormVisibility}>
               Add Asset
             </button>
           ))}
         <button
-          type="submit"
+          type="button"
           onClick={() => {
             logout();
           }}
         >
           Logout
         </button>
+        {!showReporting && (
+          <button type="button" onClick={toggleReportingVisibility}>
+            Reporting
+          </button>
+        )}
+        {showReporting && (
+          <Reporting toggleFormVisibility={toggleReportingVisibility} />
+        )}
+
         {showForm && (
           <AddAsset
             postData={postData}

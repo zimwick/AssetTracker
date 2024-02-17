@@ -10,6 +10,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const URL_PATH = "Assets";
   const [showForm, setShowForm] = useState(false);
+  const [showDetails, setShowDetails] = useState(null);
 
   const {
     getData,
@@ -28,6 +29,8 @@ export default function Dashboard() {
     setShowForm(!showForm);
   };
 
+  console.log(showDetails);
+
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
     if (!userId) {
@@ -43,7 +46,12 @@ export default function Dashboard() {
     <div>
       <div>Dashboard!</div>
       <div>
-        <button onClick={toggleFormVisibility}>Add Asset</button>
+        {!showForm && (
+          <button type="submit" onClick={toggleFormVisibility}>
+            Add Asset
+          </button>
+        )}
+
         {showForm && (
           <AddAsset
             postData={postData}
@@ -51,7 +59,10 @@ export default function Dashboard() {
             toggleFormVisibility={toggleFormVisibility}
           />
         )}
-        <AssetTable response={getDataResponse} />
+        <AssetTable
+          response={getDataResponse}
+          setShowDetails={setShowDetails}
+        />
       </div>
     </div>
   );

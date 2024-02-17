@@ -20,6 +20,12 @@ export default function Login() {
     }
   }, [response, navigate]);
 
+  useEffect(() => {
+    if (sessionStorage.getItem("userId")) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [navigate]);
+
   async function handleSubmit(e) {
     e.preventDefault();
     if (email && password) {

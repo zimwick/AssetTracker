@@ -13,6 +13,11 @@ export default function Dashboard() {
   const [showForm, setShowForm] = useState(false);
   const [showDetails, setShowDetails] = useState(null);
 
+  function logout() {
+    navigate("/", { replace: true });
+    sessionStorage.clear();
+  }
+
   const {
     getData,
     isLoading: getDataLoading,
@@ -51,7 +56,14 @@ export default function Dashboard() {
               Add Asset
             </button>
           ))}
-
+        <button
+          type="submit"
+          onClick={() => {
+            logout();
+          }}
+        >
+          Logout
+        </button>
         {showForm && (
           <AddAsset
             postData={postData}

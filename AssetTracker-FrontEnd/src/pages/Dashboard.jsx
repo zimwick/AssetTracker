@@ -15,6 +15,8 @@ export default function Dashboard() {
   const [showDetails, setShowDetails] = useState(null);
   const [showReporting, setShowReporting] = useState(null);
 
+  const [report, setReport] = useState("default");
+
   function logout() {
     navigate("/", { replace: true });
     sessionStorage.clear();
@@ -75,7 +77,10 @@ export default function Dashboard() {
           </button>
         )}
         {showReporting && (
-          <Reporting toggleFormVisibility={toggleReportingVisibility} />
+          <Reporting
+            toggleFormVisibility={toggleReportingVisibility}
+            setReport={setReport}
+          />
         )}
 
         {showForm && (
@@ -96,6 +101,7 @@ export default function Dashboard() {
           <AssetTable
             response={getDataResponse}
             setShowDetails={setShowDetails}
+            report={report}
           />
         )}
       </div>

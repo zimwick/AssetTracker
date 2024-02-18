@@ -1,11 +1,9 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import styles from "./AssetTable.module.css";
 
-export default function AssetTable({ response, setShowDetails }) {
+export default function AssetTable({ response, setShowDetails, report }) {
   const [editRowId, setEditRowId] = useState(null);
 
-  // Assuming all items in `response` have the same structure
-  // Exclude 'id' from the columns
   const columns =
     response.length > 0
       ? Object.keys(response[0]).filter((key) => key !== "id")
@@ -17,6 +15,34 @@ export default function AssetTable({ response, setShowDetails }) {
     setShowDetails(newEditRowId ? item : null);
   };
 
+  const sortedResponse = useMemo(() => {
+    const sortArray = (array) => {
+      switch (report) {
+        case "highest":
+          return [...array].sort((a, b) => b.pricePaid - a.pricePaid);
+        case "expired":
+          return [...array].filter(
+            (a) => new Date(a.warrantyExpiration) < new Date()
+          );
+        case "newest":
+          return [...array].sort(
+            (a, b) => new Date(b.datePurchased) - new Date(a.datePurchased)
+          );
+        case "owner":
+          return [...array].sort(
+            (a, b) =>
+              a.ownerFirstName.localeCompare(b.ownerFirstName) ||
+              a.ownerLastName.localeCompare(b.ownerLastName)
+          );
+        case "default":
+        default:
+          return array; // No sorting, return the original array
+      }
+    };
+
+    return sortArray(response);
+  }, [response, report]);
+
   return (
     <table>
       <thead>
@@ -26,14 +52,13 @@ export default function AssetTable({ response, setShowDetails }) {
               {column
                 .replace(/([A-Z])/g, " $1")
                 .trim()
-                .replace(/^./, (str) => str.toUpperCase())}{" "}
-              {/* Convert camelCase to Title Case */}
+                .replace(/^./, (str) => str.toUpperCase())}
             </th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {response.map((item) => (
+        {sortedResponse.map((item) => (
           <tr
             className={styles.tr}
             key={item.id}

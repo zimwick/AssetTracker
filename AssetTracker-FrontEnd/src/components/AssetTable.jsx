@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import styles from "./AssetTable.module.css";
 import Search from "./Search";
 
 export default function AssetTable({ response, setShowDetails, report }) {
@@ -76,7 +75,7 @@ export default function AssetTable({ response, setShowDetails, report }) {
         <tbody>
           {filteredAndSortedResponse.map((item) => (
             <tr
-              className={styles.tr}
+              className="hover:bg-gray-400"
               key={item.id}
               onClick={() => handleRowClick(item)}
             >

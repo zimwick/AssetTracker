@@ -80,6 +80,8 @@ export default function Dashboard() {
           <Reporting
             toggleFormVisibility={toggleReportingVisibility}
             setReport={setReport}
+            setShowReporting={setShowReporting}
+            showReporting={showReporting}
           />
         )}
 

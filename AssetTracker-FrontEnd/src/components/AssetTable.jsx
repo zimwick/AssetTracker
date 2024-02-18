@@ -1,8 +1,11 @@
 import { useState, useMemo } from "react";
 import styles from "./AssetTable.module.css";
+import Search from "./Search";
 
 export default function AssetTable({ response, setShowDetails, report }) {
   const [editRowId, setEditRowId] = useState(null);
+  const [query, setQuery] = useState("");
+  const [queryType, setQueryType] = useState("name");
 
   const columns =
     response.length > 0
@@ -44,32 +47,40 @@ export default function AssetTable({ response, setShowDetails, report }) {
   }, [response, report]);
 
   return (
-    <table>
-      <thead>
-        <tr>
-          {columns.map((column) => (
-            <th key={column}>
-              {column
-                .replace(/([A-Z])/g, " $1")
-                .trim()
-                .replace(/^./, (str) => str.toUpperCase())}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {sortedResponse.map((item) => (
-          <tr
-            className={styles.tr}
-            key={item.id}
-            onClick={() => handleRowClick(item)}
-          >
+    <div>
+      <Search
+        query={query}
+        setQuery={setQuery}
+        setQueryType={setQueryType}
+        queryType={queryType}
+      />
+      <table>
+        <thead>
+          <tr>
             {columns.map((column) => (
-              <td key={`${item.id}-${column}`}>{item[column]}</td>
+              <th key={column}>
+                {column
+                  .replace(/([A-Z])/g, " $1")
+                  .trim()
+                  .replace(/^./, (str) => str.toUpperCase())}
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {sortedResponse.map((item) => (
+            <tr
+              className={styles.tr}
+              key={item.id}
+              onClick={() => handleRowClick(item)}
+            >
+              {columns.map((column) => (
+                <td key={`${item.id}-${column}`}>{item[column]}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

@@ -1,4 +1,8 @@
-export default function Reporting({ setReport }) {
+export default function Reporting({
+  setReport,
+  setShowReporting,
+  showReporting,
+}) {
   return (
     <div>
       <button type="button" onClick={() => setReport("default")}>
@@ -15,6 +19,9 @@ export default function Reporting({ setReport }) {
       </button>
       <button type="button" onClick={() => setReport("owner")}>
         Sort by owner
+      </button>
+      <button type="button" onClick={() => setShowReporting(!showReporting)}>
+        Close
       </button>
     </div>
   );

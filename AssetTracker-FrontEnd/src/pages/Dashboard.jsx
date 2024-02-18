@@ -73,10 +73,10 @@ export default function Dashboard() {
         >
           Dashboard
         </h1>
-        <div>
+        <div className="flex space-x-2">
           <button
             onClick={logout}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2"
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
           >
             Logout
           </button>

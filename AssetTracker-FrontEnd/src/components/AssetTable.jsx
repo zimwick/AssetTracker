@@ -91,7 +91,9 @@ export default function AssetTable({ response, setShowDetails, report }) {
                     key={`${item.id}-${column}`}
                     className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                   >
-                    {item[column]}
+                    {column === "pricePaid"
+                      ? Number(item[column]).toFixed(2) // Format if column is 'pricePaid'
+                      : item[column]}
                   </td>
                 ))}
               </tr>

@@ -42,7 +42,7 @@ export default function Reporting({
       </button>
       <button
         type="button"
-        onClick={() => setShowReporting(!showReporting)}
+        onClick={() => setShowReporting(showReporting)}
         className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition duration-150 ease-in-out"
       >
         Close

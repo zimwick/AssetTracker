@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useGet from "../hooks/useGet";
 import { BASE_URL } from "../utils/BaseUrl";
 import AssetTable from "../components/AssetTable";
-import usePost from "../hooks/usePost"; // Ensure usePost is imported
+import usePost from "../hooks/usePost";
 import AddAsset from "../components/AddAsset";
 import AssetDetail from "../components/AssetDetail";
 import Reporting from "../components/Reporting";
@@ -16,23 +16,38 @@ export default function Dashboard() {
   const [showReporting, setShowReporting] = useState(false);
   const [report, setReport] = useState("default");
 
-  // usePost hook for handling post requests
-  const {
-    postData,
-    isLoading: postDataLoading,
-    error: postDataError,
-    response: postDataResponse,
-  } = usePost(BASE_URL, URL_PATH);
+  const { postData } = usePost(BASE_URL, URL_PATH);
+  const { getData, response: getDataResponse } = useGet(BASE_URL, URL_PATH);
 
-  const {
-    getData,
-    isLoading: getDataLoading,
-    error: getDataError,
-    response: getDataResponse,
-  } = useGet(BASE_URL, URL_PATH);
+  const toggleFormVisibility = () => {
+    setShowForm(!showForm);
+    if (showForm === false) {
+      setShowReporting(false);
+    }
+  };
 
-  const toggleFormVisibility = () => setShowForm(!showForm);
-  const toggleReportingVisibility = () => setShowReporting(!showReporting);
+  function handleClearPage() {
+    setShowDetails(false);
+    setShowForm(false);
+    setShowReporting(false);
+  }
+
+  const handleShowDetails = (details) => {
+    setShowDetails(details);
+    if (details !== null) {
+      setShowReporting(false);
+    }
+  };
+
+  // Correctly defined toggleReportingVisibility function
+  const toggleReportingVisibility = () => {
+    setShowReporting(!showReporting);
+    // Optionally, hide other UI elements when showing reporting
+    if (showReporting === false) {
+      setShowForm(false);
+      setShowDetails(null);
+    }
+  };
 
   useEffect(() => {
     if (!sessionStorage.getItem("userId")) {
@@ -52,7 +67,12 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
-        <h1 className="text-xl font-semibold">Dashboard</h1>
+        <h1
+          onClick={() => handleClearPage()}
+          className="text-xl font-semibold cursor-pointer hover"
+        >
+          Dashboard
+        </h1>
         <div>
           <button
             onClick={logout}
@@ -60,32 +80,31 @@ export default function Dashboard() {
           >
             Logout
           </button>
-          {!(showForm || showDetails) && (
+          {!showDetails && (
             <button
               onClick={toggleFormVisibility}
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+              className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ${
+                showForm ? "hidden" : ""
+              }`}
             >
               Add Asset
             </button>
           )}
-          <button
-            onClick={toggleReportingVisibility}
-            className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
-          >
-            {showReporting ? "Hide" : "Show"} Reporting
-          </button>
+          {!showForm && !showDetails && (
+            <button
+              onClick={toggleReportingVisibility}
+              className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
+            >
+              {showReporting ? "Hide" : "Show"} Reporting
+            </button>
+          )}
         </div>
       </header>
       <main className="p-4">
-        {postDataError && (
-          <p className="text-red-500">Error: {postDataError}</p>
-        )}
-        {getDataError && <p className="text-red-500">Error: {getDataError}</p>}
         {showReporting && (
           <Reporting
             setReport={setReport}
             setShowReporting={setShowReporting}
-            showReporting={showReporting}
           />
         )}
         {showForm && (
@@ -98,14 +117,14 @@ export default function Dashboard() {
         {showDetails && (
           <AssetDetail
             showDetails={showDetails}
-            setShowDetails={setShowDetails}
+            setShowDetails={handleShowDetails}
             getData={getData}
           />
         )}
         {!showDetails && !showForm && (
           <AssetTable
             response={getDataResponse}
-            setShowDetails={setShowDetails}
+            setShowDetails={handleShowDetails}
             report={report}
           />
         )}

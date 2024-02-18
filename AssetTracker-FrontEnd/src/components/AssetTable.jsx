@@ -18,7 +18,13 @@ export default function AssetTable({ response, setShowDetails, report }) {
     setShowDetails(newEditRowId ? item : null);
   };
 
-  const sortedResponse = useMemo(() => {
+  const filteredAndSortedResponse = useMemo(() => {
+    let filtered = response.filter((item) => {
+      // Convert both strings to lowercase for case-insensitive comparison
+      const itemValue = String(item[queryType]).toLowerCase();
+      return itemValue.includes(query.toLowerCase());
+    });
+
     const sortArray = (array) => {
       switch (report) {
         case "highest":
@@ -39,12 +45,12 @@ export default function AssetTable({ response, setShowDetails, report }) {
           );
         case "default":
         default:
-          return array; // No sorting, return the original array
+          return array; // No sorting applied, just return the filtered array
       }
     };
 
-    return sortArray(response);
-  }, [response, report]);
+    return sortArray(filtered);
+  }, [response, report, query, queryType]);
 
   return (
     <div>
@@ -68,7 +74,7 @@ export default function AssetTable({ response, setShowDetails, report }) {
           </tr>
         </thead>
         <tbody>
-          {sortedResponse.map((item) => (
+          {filteredAndSortedResponse.map((item) => (
             <tr
               className={styles.tr}
               key={item.id}

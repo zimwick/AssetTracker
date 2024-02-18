@@ -34,9 +34,9 @@ export default function Search({ query, setQuery, setQueryType, queryType }) {
       >
         <option value="name">Name</option>
         <option value="make">Make</option>
-        <option value="ownerFirst">Owner First Name</option>
-        <option value="ownerLast">Owner Last Name</option>
-        <option value="serial">Serial Number</option>
+        <option value="ownerFirstName">Owner First Name</option>
+        <option value="ownerLastName">Owner Last Name</option>
+        <option value="serialNumber">Serial Number</option>
       </select>
     </div>
   );

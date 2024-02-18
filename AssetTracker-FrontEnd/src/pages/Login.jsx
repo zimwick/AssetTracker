@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import usePost from "../hooks/usePost";
 import { BASE_URL } from "../utils/BaseUrl";
 import { useNavigate } from "react-router-dom";
+import styles from "./Login.module.css";
 
 export default function Login() {
   const [email, setEmail] = useState("user@example.com");

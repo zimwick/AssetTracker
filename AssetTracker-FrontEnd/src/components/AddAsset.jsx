@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ValidateDollarAmmount from "../utils/ValidateDollarAmount";
 
 export default function DashboardForm({
   postData,
@@ -6,15 +7,16 @@ export default function DashboardForm({
   toggleFormVisibility,
 }) {
   const [name, setName] = useState("");
-  const [make, setMake] = useState("");
-  const [model, setModel] = useState("");
+  const [make, setMake] = useState(null);
+  const [model, setModel] = useState(null);
   const [location, setLocation] = useState("");
-  const [serialNumber, setSerialNumber] = useState("");
+  const [serialNumber, setSerialNumber] = useState(null);
   const [pricePaid, setPricePaid] = useState("");
   const [DatePurchased, setDatePurchased] = useState("");
-  const [warrantyExpiration, setWarrantyExpiration] = useState("");
+  const [warrantyExpiration, setWarrantyExpiration] = useState(null);
   const [ownerFirstName, setOwnerFirstName] = useState("");
   const [ownerLastName, setOwnerLastName] = useState("");
+  const [priceError, setPriceError] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -30,9 +32,14 @@ export default function DashboardForm({
       ownerFirstName,
       ownerLastName,
     };
-    await postData(newAsset);
-    toggleFormVisibility();
-    await getData(sessionStorage.getItem("token"));
+    if (ValidateDollarAmmount(pricePaid) === false) {
+      setPriceError(true);
+    } else {
+      await postData(newAsset);
+      toggleFormVisibility();
+      await getData(sessionStorage.getItem("token"));
+      console.log(warrantyExpiration);
+    }
   }
 
   return (
@@ -59,7 +66,7 @@ export default function DashboardForm({
             htmlFor="make"
             className="block text-sm font-medium text-gray-700"
           >
-            Make
+            Make (optional)
           </label>
           <input
             id="make"
@@ -76,7 +83,7 @@ export default function DashboardForm({
             htmlFor="model"
             className="block text-sm font-medium text-gray-700"
           >
-            Model
+            Model (optional)
           </label>
           <input
             id="model"
@@ -110,7 +117,7 @@ export default function DashboardForm({
             htmlFor="serialNumber"
             className="block text-sm font-medium text-gray-700"
           >
-            Serial Number
+            Serial Number (optional)
           </label>
           <input
             id="serialNumber"
@@ -125,9 +132,14 @@ export default function DashboardForm({
         <div>
           <label
             htmlFor="pricePaid"
-            className="block text-sm font-medium text-gray-700"
+            className={
+              priceError
+                ? "block text-sm font-medium text-red-700"
+                : "block text-sm font-medium text-gray-700"
+            }
           >
-            Price Paid
+            Price Paid{" "}
+            {priceError && "Error: Price must be in dollar amount e.g. 23.50"}
           </label>
           <input
             id="pricePaid"
@@ -160,13 +172,17 @@ export default function DashboardForm({
             htmlFor="warrantyExpiration"
             className="block text-sm font-medium text-gray-700"
           >
-            Warranty Expiration
+            Warranty Expiration (optional)
           </label>
           <input
             id="warrantyExpiration"
             type="date"
             value={warrantyExpiration}
-            onChange={(e) => setWarrantyExpiration(e.target.value)}
+            onChange={(e) =>
+              setWarrantyExpiration(
+                e.target.value === "" ? null : e.target.value
+              )
+            }
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           />
         </div>

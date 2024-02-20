@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BASE_URL } from "../utils/BaseUrl";
+import ValidateDollarAmmount from "../utils/ValidateDollarAmount";
 
 export default function AssetDetail({ showDetails, setShowDetails, getData }) {
   const [name, setName] = useState(showDetails.name);
@@ -16,6 +17,8 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
     showDetails.ownerFirstName
   );
   const [ownerLastName, setOwnerLastName] = useState(showDetails.ownerLastName);
+  const [priceError, setPriceError] = useState(false);
+  const [dateError, setDateError] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -33,36 +36,44 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
       id: showDetails.id,
     };
     try {
-      const response = await fetch(`${BASE_URL}/ASSETS/${showDetails.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(updatedAsset),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (ValidateDollarAmmount(pricePaid) === false) {
+        setPriceError(true);
       }
+      if (DatePurchased > warrantyExpiration) {
+        setDateError(true);
+      }
+      if (priceError == false && dateError == false) {
+        const response = await fetch(`${BASE_URL}/ASSETS/${showDetails.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(updatedAsset),
+        });
 
-      // Check if the response has content before parsing it as JSON
-      const contentType = response.headers.get("Content-Type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        console.log("Success:", data);
-        // Handle success, e.g., show a message to the user or update the UI
-      } else {
-        // Handle no content
-        console.log("Request was successful, but no content returned.");
-        // You might want to update UI or state to reflect the successful update
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Check if the response has content before parsing it as JSON
+        const contentType = response.headers.get("Content-Type");
+        if (contentType && contentType.includes("application/json")) {
+          const data = await response.json();
+          console.log("Success:", data);
+          // Handle success, e.g., show a message to the user or update the UI
+        } else {
+          // Handle no content
+          console.log("Request was successful, but no content returned.");
+          // You might want to update UI or state to reflect the successful update
+        }
+        await getData(sessionStorage.getItem("token"));
+        setShowDetails(false);
       }
     } catch (error) {
       console.error("Error:", error);
       // Handle errors, e.g., show an error message to the user
     }
-    await getData(sessionStorage.getItem("token"));
-    setShowDetails(false);
   }
 
   async function handleDelete() {
@@ -120,7 +131,7 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
             htmlFor="make"
             className="block text-sm font-medium text-gray-700"
           >
-            Make
+            Make (optional)
           </label>
           <input
             id="make"
@@ -137,7 +148,7 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
             htmlFor="model"
             className="block text-sm font-medium text-gray-700"
           >
-            Model
+            Model (optional)
           </label>
           <input
             id="model"
@@ -171,7 +182,7 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
             htmlFor="serialNumber"
             className="block text-sm font-medium text-gray-700"
           >
-            Serial Number
+            Serial Number (optional)
           </label>
           <input
             id="serialNumber"
@@ -186,9 +197,14 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
         <div>
           <label
             htmlFor="pricePaid"
-            className="block text-sm font-medium text-gray-700"
+            className={
+              priceError
+                ? "block text-sm font-medium text-red-700"
+                : "block text-sm font-medium text-gray-700"
+            }
           >
-            Price Paid
+            Price Paid{" "}
+            {priceError && "Error: Price must be in dollar amount e.g. 23.50"}
           </label>
           <input
             id="pricePaid"
@@ -219,15 +235,25 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
         <div>
           <label
             htmlFor="warrantyExpiration"
-            className="block text-sm font-medium text-gray-700"
+            className={
+              dateError
+                ? "block text-sm font-medium text-red-700"
+                : "block text-sm font-medium text-gray-700"
+            }
           >
-            Warranty Expiration
+            Warranty Expiration (optional){" "}
+            {dateError &&
+              "Error: warranty date must be later than purchase date"}
           </label>
           <input
             id="warrantyExpiration"
             type="date"
             value={warrantyExpiration}
-            onChange={(e) => setWarrantyExpiration(e.target.value)}
+            onChange={(e) =>
+              setWarrantyExpiration(
+                e.target.value === "" ? null : e.target.value
+              )
+            }
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           />
         </div>

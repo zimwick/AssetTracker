@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const [email, setEmail] = useState("user@example.com");
   const [password, setPassword] = useState("Password@1");
+  const [loginError, setLoginError] = useState(false);
   const navigate = useNavigate();
 
   const URL_PATH = "Account/login";
@@ -13,24 +14,27 @@ export default function Login() {
 
   useEffect(() => {
     if (response.token && response.refreshToken) {
+      setLoginError(false);
       sessionStorage.setItem("userId", response.userId);
       sessionStorage.setItem("token", response.token);
       sessionStorage.setItem("refreshToken", response.refreshToken);
       navigate("/dashboard", { replace: true });
-    }
-  }, [response, navigate]);
-
-  useEffect(() => {
-    if (sessionStorage.getItem("userId")) {
+    } else if (sessionStorage.getItem("userId")) {
+      setLoginError(false);
       navigate("/dashboard", { replace: true });
     }
-  }, [navigate]);
+  }, [response, navigate]);
 
   async function handleSubmit(e) {
     e.preventDefault();
     if (email && password) {
       const credentials = { email, password };
-      await postData(credentials);
+      const result = await postData(credentials); // Capture the result from postData
+      if (!result.success && result.status === 401) {
+        setLoginError(true);
+        setEmail("user@example.com");
+        setPassword("Password@1");
+      }
     }
   }
 
@@ -61,6 +65,11 @@ export default function Login() {
             className="w-full p-3 rounded bg-gray-50 border border-gray-300"
           />
         </div>
+        {loginError && (
+          <p className="bg-red-100 text-red-700 border border-red-400 text-sm rounded-lg p-3 mt-2 mb-4 text-center">
+            Error: Incorrect username or password
+          </p>
+        )}
         <button
           type="submit"
           disabled={isLoading}
@@ -68,7 +77,6 @@ export default function Login() {
         >
           {isLoading ? "Logging in..." : "Login"}
         </button>
-        {error && <p className="mt-4 text-red-500">Error: {error}</p>}
       </form>
     </div>
   );

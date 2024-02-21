@@ -11,8 +11,10 @@ namespace AssetTracker_BackEnd.Data.Configurations
             builder.HasData(
                 new IdentityRole
                 {
+                    Id = "b331ce72-dc6e-4de8-a9f4-c5920fbabb97",
                     Name = "Administrator",
                     NormalizedName = "ADMINISTRATOR"
+                    
                 }
             );
         }

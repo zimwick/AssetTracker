@@ -21,6 +21,13 @@ namespace AssetTracker_BackEnd.Data
 
             //assets seed data
             modelBuilder.ApplyConfiguration(new AssetConfiguration());
+
+            //seeding the database admin api account
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+
+            //matching admin account with admin role
+            modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
         }
+
     }
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BASE_URL } from "../utils/BaseUrl";
-import ValidateDollarAmmount from "../utils/ValidateDollarAmount";
+import ValidateDollarAmount from "../utils/ValidateDollarAmount";
 
 export default function AssetDetail({ showDetails, setShowDetails, getData }) {
   const [name, setName] = useState(showDetails.name);
@@ -246,7 +246,7 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
               // Set the pricePaid state to the new value
               setPricePaid(value);
               // Check if the new value is a valid dollar amount and update priceError state
-              const isValid = ValidateDollarAmmount(value) || value === ""; // Allow empty string to clear the error
+              const isValid = ValidateDollarAmount(value) || value === ""; // Allow empty string to clear the error
               setPriceError(!isValid);
             }}
             placeholder="Enter price paid"

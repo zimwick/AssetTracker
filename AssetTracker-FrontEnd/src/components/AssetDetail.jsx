@@ -240,7 +240,7 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
           <input
             id="pricePaid"
             type="text"
-            value={pricePaid}
+            value={Number(pricePaid).toFixed(2)}
             onChange={(e) => {
               const value = e.target.value;
               // Set the pricePaid state to the new value

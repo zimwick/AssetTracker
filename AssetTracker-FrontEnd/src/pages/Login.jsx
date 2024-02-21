@@ -33,7 +33,7 @@ export default function Login() {
       if (!result.success && result.status === 401) {
         setLoginError(true);
         setEmail("user@example.com");
-        setPassword("Password@1");
+        setPassword("Qwerty");
       }
     }
   }

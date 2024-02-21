@@ -20,6 +20,43 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
   const [priceError, setPriceError] = useState(false);
   const [dateError, setDateError] = useState(false);
 
+  const validateDates = (newDatePurchased, newWarrantyExpiration) => {
+    // Convert to date objects for comparison
+    const purchaseDate = new Date(newDatePurchased);
+    const expirationDate = new Date(newWarrantyExpiration);
+
+    // Validate that neither date precedes the other
+    if (
+      newDatePurchased &&
+      newWarrantyExpiration &&
+      purchaseDate > expirationDate
+    ) {
+      setDateError(true);
+      return false;
+    } else {
+      setDateError(false);
+      return true;
+    }
+  };
+
+  const handleDatePurchasedChange = (e) => {
+    const newDatePurchased = e.target.value;
+    if (validateDates(newDatePurchased, warrantyExpiration)) {
+      setDatePurchased(newDatePurchased);
+    }
+  };
+
+  const handleWarrantyExpirationChange = (e) => {
+    const newWarrantyExpiration = e.target.value;
+    // Check and convert an empty string to null before validation
+    const adjustedWarrantyExpiration =
+      newWarrantyExpiration === "" ? null : newWarrantyExpiration;
+
+    if (validateDates(DatePurchased, adjustedWarrantyExpiration)) {
+      setWarrantyExpiration(adjustedWarrantyExpiration);
+    }
+  };
+
   async function handleSubmit(e) {
     e.preventDefault();
     const updatedAsset = {
@@ -36,12 +73,6 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
       id: showDetails.id,
     };
     try {
-      if (ValidateDollarAmmount(pricePaid) === false) {
-        setPriceError(true);
-      }
-      if (DatePurchased > warrantyExpiration) {
-        setDateError(true);
-      }
       if (priceError == false && dateError == false) {
         const response = await fetch(`${BASE_URL}/ASSETS/${showDetails.id}`, {
           method: "PUT",
@@ -210,9 +241,18 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
             id="pricePaid"
             type="text"
             value={pricePaid}
-            onChange={(e) => setPricePaid(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              // Set the pricePaid state to the new value
+              setPricePaid(value);
+              // Check if the new value is a valid dollar amount and update priceError state
+              const isValid = ValidateDollarAmmount(value) || value === ""; // Allow empty string to clear the error
+              setPriceError(!isValid);
+            }}
             placeholder="Enter price paid"
-            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            className={`mt-1 block w-full px-3 py-2 bg-white border ${
+              priceError ? "border-red-500" : "border-gray-300"
+            } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
           />
         </div>
         {/* Date Purchased */}
@@ -227,11 +267,10 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
             id="datePurchased"
             type="date"
             value={DatePurchased}
-            onChange={(e) => setDatePurchased(e.target.value)}
+            onChange={handleDatePurchasedChange}
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
-        {/* Warranty Expiration */}
         <div>
           <label
             htmlFor="warrantyExpiration"
@@ -243,17 +282,13 @@ export default function AssetDetail({ showDetails, setShowDetails, getData }) {
           >
             Warranty Expiration (optional){" "}
             {dateError &&
-              "Error: warranty date must be later than purchase date"}
+              "Error: Date Purchased must be earlier than Warranty Expiration"}
           </label>
           <input
             id="warrantyExpiration"
             type="date"
             value={warrantyExpiration}
-            onChange={(e) =>
-              setWarrantyExpiration(
-                e.target.value === "" ? null : e.target.value
-              )
-            }
+            onChange={handleWarrantyExpirationChange}
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           />
         </div>

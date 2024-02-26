@@ -8,7 +8,7 @@ Asset Tracker is a comprehensive web application designed to simplify the manage
 
 Asset Tracker allows users to perform various asset management operations, including:
 
-- **Add New Assets:** Users can add new assets to the system, including details such as asset name, category, purchase date, and value.
+- **Add New Assets:** Users can add new assets to the system, including details such as asset name, purchase date, and value.
 - **Update Assets:** Existing asset details can be easily updated to reflect their current status or information.
 - **Delete Assets:** Users can remove assets from the system that are no longer needed or relevant.
 - **View Asset List:** The application provides a comprehensive view of all assets, allowing users to easily browse, search, and filter through the asset inventory.

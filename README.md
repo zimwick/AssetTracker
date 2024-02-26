@@ -1,29 +1,34 @@
-<strong>**DO NOT DISTRIBUTE OR PUBLICLY POST SOLUTIONS TO THESE LABS. MAKE ALL FORKS OF THIS REPOSITORY WITH SOLUTION CODE PRIVATE. PLEASE REFER TO THE STUDENT CODE OF CONDUCT AND ETHICAL EXPECTATIONS FOR COLLEGE OF INFORMATION TECHNOLOGY STUDENTS FOR SPECIFICS. **</strong>
+# Asset Tracker
 
-# WESTERN GOVERNOR UNIVERSITY 
-## D424 – SOFTWARE ENGINEERING CAPSTONE
-Welcome to Software Engineering Capstone! This is an opportunity for students to develop full stack software engineering documentation and applications. They will execute documentation, unit testing, revision of software applications, and deploy software applications with scripts and containers on a cloud platform.
+## Introduction
 
-FOR SPECIFIC TASK INSTRUCTIONS AND REQUIREMENTS FOR THIS ASSESSMENT, PLEASE REFER TO THE COURSE PAGE.
-BASIC INSTRUCTIONS
-For this assessment, you will deploy your developed full stack software product to a web service of your choice.
+Asset Tracker is a comprehensive web application designed to simplify the management of assets for organizations and individuals. With a user-friendly interface built using React and styled with Tailwind CSS, the application offers seamless asset management capabilities. The backend is powered by a robust .NET 8 API, which communicates with a SQL database using Entity Framework, ensuring secure and efficient data management.
 
+## Features
 
-## SUPPLEMENTAL RESOURCES  
-1.	How to clone a project to IntelliJ using Git?
+Asset Tracker allows users to perform various asset management operations, including:
 
-> Ensure that you have Git installed on your system and that IntelliJ is installed using [Toolbox](https://www.jetbrains.com/toolbox-app/). Make sure that you are using version 2022.3.2. Once this has been confirmed, click the clone button and use the 'IntelliJ IDEA (HTTPS)' button. This will open IntelliJ with a prompt to clone the proejct. Save it in a safe location for the directory and press clone. IntelliJ will prompt you for your credentials. Enter in your WGU Credentials and the project will be cloned onto your local machine.  
+- **Add New Assets:** Users can add new assets to the system, including details such as asset name, category, purchase date, and value.
+- **Update Assets:** Existing asset details can be easily updated to reflect their current status or information.
+- **Delete Assets:** Users can remove assets from the system that are no longer needed or relevant.
+- **View Asset List:** The application provides a comprehensive view of all assets, allowing users to easily browse, search, and filter through the asset inventory.
 
-2. How to create a branch and start Development?
+## Technologies Used
 
-- GitLab method
-> Press the '+' button located near your branch name. In the dropdown list, press the 'New branch' button. This will allow you to create a name for your branch. Once the branch has been named, you can select 'Create Branch' to push the branch to your repository.
+- **Frontend:**
+  - React: A JavaScript library for building user interfaces.
+  - Tailwind CSS: A utility-first CSS framework for rapidly building custom designs.
+- **Backend:**
+  - .NET 8 API: A modern, high-performance backend framework.
+  - Entity Framework: An object-relational mapper (ORM) for .NET, used for data access and management.
+  - SQL Database: For storing and managing asset data efficiently.
 
-- IntelliJ method
-> In IntelliJ, Go to the 'Git' button on the top toolbar. Select the new branch option and create a name for the branch. Make sure checkout branch is selected and press create. You can now add a commit message and push the new branch to the local repo.
+## Setup Instructions
 
-## SUPPORT
-If you need additional support, please navigate to the course page and reach out to your course instructor.
+### Prerequisites
 
-## FUTURE USE
-Take this opportunity to create or add to a simple resume portfolio to highlight and showcase your work for future use in career search, experience, and education!
+- Node.js (LTS version)
+- .NET 8 SDK
+- SQL Server
+
+### Installing

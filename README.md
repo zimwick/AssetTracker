@@ -30,5 +30,3 @@ Asset Tracker allows users to perform various asset management operations, inclu
 - Node.js (LTS version)
 - .NET 8 SDK
 - SQL Server
-
-### Installing

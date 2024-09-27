@@ -1,4 +1,13 @@
-﻿IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+CREATE DATABASE AssetTracker;
+GO
+
+SET QUOTED_IDENTIFIER ON;
+GO
+
+USE AssetTracker;
+GO
+
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
 BEGIN
     CREATE TABLE [__EFMigrationsHistory] (
         [MigrationId] nvarchar(150) NOT NULL,
